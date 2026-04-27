@@ -1,0 +1,1292 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Minerva — your AI Chief of Staff</title>
+<meta name="description" content="Minerva is your private AI Chief of Staff. She thinks like an HBS professor, communicates in your tone, and takes care of everything from your COO to your son's vaccines." />
+<style>
+  :root {
+    /* Premium feminine palette */
+    --bg: #1a141a;            /* deep plum-graphite */
+    --bg-soft: #221a22;
+    --bg-card: #281f28;
+    --bg-elev: #2f242f;
+    --fg: #f0e8dc;            /* warm pearl */
+    --fg-soft: #c9bdb0;
+    --fg-muted: #877c70;
+    --gold: #d4a574;          /* champagne */
+    --gold-bright: #e8c896;
+    --rose: #c98590;          /* rose accent */
+    --line: #3a2e3a;
+    --green: #8eb585;
+    --red: #c97064;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', system-ui, sans-serif;
+    line-height: 1.6;
+    font-weight: 300;
+    overflow-x: hidden;
+  }
+
+  /* Type scale */
+  h1, h2, h3, h4 {
+    font-family: 'Cormorant Garamond', 'Times New Roman', serif;
+    font-weight: 300;
+    letter-spacing: -0.01em;
+  }
+
+  /* Layout */
+  .wrap { max-width: 1100px; margin: 0 auto; padding: 0 28px; }
+  .narrow { max-width: 800px; margin: 0 auto; padding: 0 28px; }
+  section { padding: 100px 0; }
+  hr.divider { border: none; height: 1px; background: var(--line); margin: 0; }
+
+  /* Hero */
+  header.hero {
+    position: relative;
+    min-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow: hidden;
+    padding: 60px 0 40px;
+  }
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background-image: url('hero.png');
+    background-size: cover;
+    background-position: center;
+    opacity: 0.55;
+    filter: contrast(1.05);
+    z-index: 0;
+  }
+  .hero-bg::after {
+    content: '';
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse at center, transparent 0%, var(--bg) 75%),
+      linear-gradient(180deg, var(--bg) 0%, transparent 30%, transparent 70%, var(--bg) 100%);
+  }
+  .hero-content {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: 80px 28px;
+  }
+  .eyebrow {
+    color: var(--gold);
+    font-size: 11px;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    font-weight: 500;
+    margin-bottom: 28px;
+  }
+  .hero-content h1 {
+    font-size: clamp(48px, 7vw, 96px);
+    line-height: 1.0;
+    margin-bottom: 32px;
+    letter-spacing: -0.02em;
+  }
+  .hero-content h1 em {
+    color: var(--gold-bright);
+    font-style: italic;
+    font-weight: 300;
+  }
+  .lede {
+    font-size: clamp(18px, 1.6vw, 22px);
+    color: var(--fg-soft);
+    max-width: 680px;
+    margin: 0 auto 40px;
+    line-height: 1.55;
+  }
+  .signature {
+    color: var(--gold);
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 18px;
+    margin-top: 60px;
+    opacity: 0.7;
+  }
+
+  /* Section headers */
+  h2.section-title {
+    font-size: clamp(36px, 4vw, 56px);
+    margin-bottom: 16px;
+    line-height: 1.05;
+  }
+  h2.section-title em {
+    color: var(--gold-bright);
+    font-style: italic;
+  }
+  .section-eyebrow {
+    color: var(--gold);
+    font-size: 11px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    font-weight: 500;
+    margin-bottom: 18px;
+  }
+  .section-lede {
+    font-size: 18px;
+    color: var(--fg-soft);
+    max-width: 640px;
+    margin-bottom: 56px;
+    line-height: 1.6;
+  }
+
+  /* What she does — feature blocks */
+  .feature {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: start;
+    padding: 64px 0;
+    border-top: 1px solid var(--line);
+  }
+  .feature:first-child { border-top: none; padding-top: 0; }
+  .feature.flip .copy { order: 2; }
+  .feature h3 {
+    font-size: 36px;
+    line-height: 1.1;
+    margin-bottom: 18px;
+    color: var(--fg);
+  }
+  .feature h3 em {
+    color: var(--gold-bright);
+    font-style: italic;
+  }
+  .feature p {
+    color: var(--fg-soft);
+    font-size: 16px;
+    margin-bottom: 18px;
+    line-height: 1.7;
+  }
+  .feature-tag {
+    display: inline-block;
+    color: var(--gold);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    font-weight: 500;
+  }
+
+  /* Example cards (the "she would say this" mockups) */
+  .example {
+    background: linear-gradient(135deg, var(--bg-card), var(--bg-soft));
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 32px 32px 28px;
+    position: relative;
+    overflow: hidden;
+  }
+  .example::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, var(--gold), var(--rose), transparent);
+  }
+  .example .who {
+    color: var(--gold);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    font-weight: 500;
+  }
+  .example .said {
+    color: var(--fg);
+    font-size: 16px;
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    line-height: 1.5;
+    font-size: 19px;
+  }
+  .example .said + .said { margin-top: 14px; opacity: 0.85; }
+  .example .meta {
+    color: var(--fg-muted);
+    font-size: 12px;
+    margin-top: 18px;
+    letter-spacing: 0.06em;
+  }
+
+  /* Use case grid */
+  .uc-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1px;
+    background: var(--line);
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--line);
+  }
+  .uc {
+    background: var(--bg-card);
+    padding: 36px 32px;
+  }
+  .uc-icon {
+    color: var(--gold);
+    font-size: 13px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 500;
+    margin-bottom: 16px;
+  }
+  .uc h4 {
+    font-size: 24px;
+    color: var(--fg);
+    margin-bottom: 12px;
+    line-height: 1.2;
+  }
+  .uc h4 em { color: var(--gold-bright); font-style: italic; }
+  .uc p {
+    font-size: 14px;
+    color: var(--fg-soft);
+    line-height: 1.65;
+  }
+
+  /* Architecture diagram */
+  .arch {
+    background: var(--bg-soft);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 56px 40px;
+  }
+  .arch-svg-wrap {
+    width: 100%;
+    overflow-x: auto;
+  }
+  .arch-svg {
+    width: 100%;
+    height: auto;
+    min-width: 800px;
+    max-width: 980px;
+    margin: 0 auto;
+    display: block;
+  }
+  .arch-legend {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-top: 40px;
+  }
+  .arch-legend-item h5 {
+    color: var(--gold);
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+    font-weight: 500;
+    font-family: -apple-system, sans-serif;
+  }
+  .arch-legend-item p {
+    font-size: 14px;
+    color: var(--fg-soft);
+    line-height: 1.55;
+  }
+
+  /* Decision flow */
+  .flow {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-top: 40px;
+  }
+  .flow-step {
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 24px 20px;
+    position: relative;
+  }
+  .flow-step::after {
+    content: '→';
+    position: absolute;
+    right: -12px;
+    top: 50%;
+    color: var(--gold);
+    font-size: 18px;
+    transform: translateY(-50%);
+    z-index: 2;
+  }
+  .flow-step:last-child::after { display: none; }
+  .flow-num {
+    color: var(--gold);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    margin-bottom: 10px;
+  }
+  .flow-step h5 {
+    font-size: 17px;
+    margin-bottom: 6px;
+    color: var(--fg);
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 400;
+  }
+  .flow-step p {
+    color: var(--fg-muted);
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  /* Image card variant for feature examples */
+  .image-card {
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    aspect-ratio: 16/10;
+    background: var(--bg-card);
+  }
+  .image-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* Full-bleed visual break */
+  .visual-break {
+    width: 100%;
+    height: 60vh;
+    min-height: 420px;
+    max-height: 640px;
+    position: relative;
+    overflow: hidden;
+    margin: 60px 0;
+  }
+  .visual-break img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    opacity: 0.85;
+  }
+  .visual-break::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at center, transparent 30%, var(--bg) 100%),
+      linear-gradient(180deg, var(--bg) 0%, transparent 15%, transparent 85%, var(--bg) 100%);
+    pointer-events: none;
+  }
+  .visual-break-caption {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    z-index: 1;
+    padding: 0 28px;
+  }
+  .visual-break-caption p {
+    color: var(--gold-bright);
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: clamp(28px, 3.5vw, 44px);
+    line-height: 1.2;
+    max-width: 700px;
+    text-shadow: 0 0 30px rgba(0,0,0,0.6);
+  }
+
+  /* "Month three" block with side image */
+  .month-three {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+  }
+  .month-three .copy p {
+    margin-bottom: 24px;
+    line-height: 1.6;
+    color: var(--fg-soft);
+    font-size: 17px;
+  }
+  .month-three .image-card {
+    aspect-ratio: 16/10;
+  }
+  @media (max-width: 768px) {
+    .month-three { grid-template-columns: 1fr; gap: 32px; }
+  }
+
+  /* Privacy */
+  .privacy {
+    background: var(--bg-soft);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--gold);
+    padding: 36px 36px;
+    border-radius: 4px;
+  }
+  .privacy h3 {
+    font-size: 28px;
+    margin-bottom: 14px;
+  }
+  .privacy ul {
+    list-style: none;
+    margin-top: 18px;
+  }
+  .privacy li {
+    color: var(--fg-soft);
+    padding: 10px 0;
+    border-bottom: 1px solid var(--line);
+    font-size: 15px;
+  }
+  .privacy li::before {
+    content: '·';
+    color: var(--gold);
+    margin-right: 14px;
+    font-weight: 700;
+  }
+  .privacy li:last-child { border-bottom: none; }
+
+  /* CTA */
+  .cta {
+    text-align: center;
+    padding: 100px 0;
+    border-top: 1px solid var(--line);
+  }
+  .cta h2 {
+    font-size: clamp(40px, 5vw, 64px);
+    margin-bottom: 20px;
+    line-height: 1.05;
+  }
+  .cta h2 em { color: var(--gold-bright); font-style: italic; }
+  .cta p {
+    color: var(--fg-soft);
+    font-size: 18px;
+    max-width: 560px;
+    margin: 0 auto 40px;
+    line-height: 1.55;
+  }
+  .cta-button {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--gold), var(--gold-bright));
+    color: var(--bg);
+    padding: 18px 40px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-size: 13px;
+    transition: transform 0.2s ease;
+  }
+  .cta-button:hover { transform: translateY(-2px); }
+  .signed {
+    margin-top: 40px;
+    color: var(--fg-muted);
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 16px;
+  }
+
+  /* Footer */
+  footer {
+    padding: 40px 0;
+    color: var(--fg-muted);
+    font-size: 12px;
+    text-align: center;
+    border-top: 1px solid var(--line);
+  }
+  footer a { color: var(--gold); text-decoration: none; }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .feature { grid-template-columns: 1fr; gap: 32px; padding: 48px 0; }
+    .feature.flip .copy { order: 0; }
+    .uc-grid { grid-template-columns: 1fr; }
+    .arch-legend { grid-template-columns: 1fr; }
+    .flow { grid-template-columns: 1fr 1fr; gap: 12px; }
+    .flow-step::after { display: none; }
+  }
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<!-- ════════════════════════ HERO ════════════════════════ -->
+<header class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <div class="eyebrow">For Snowy · Built by Jorge · April 2026</div>
+    <h1>Snowy,<br/>meet <em>Minerva.</em></h1>
+    <p class="lede">
+      I built her for you. She thinks like an HBS professor. She communicates
+      in your tone. She runs Hifas alongside Ivy. She watches Gabriel's calendar.
+      She tracks every container from Valencia to Shanghai. She works while you sleep.
+    </p>
+    <p class="signature">— She is yours alone.</p>
+  </div>
+</header>
+
+<!-- ════════════════════════ A NOTE FROM JORGE ════════════════════════ -->
+<section>
+  <div class="narrow">
+    <div class="section-eyebrow">A note from me</div>
+    <h2 class="section-title">Snowy —<br/>I built this <em>for you, specifically.</em></h2>
+    <p class="section-lede" style="font-size: 19px;">
+      We've talked before about how much you carry. Hifas in Madrid. Hifas in
+      Shenzhen. Ivy and the Spanish team. Gabriel and the things only mothers
+      remember. The investors, the lawyers, the customs flags, the contracts in
+      three languages.
+    </p>
+    <p class="section-lede" style="font-size: 19px;">
+      I spent six months building Minerva — the assistant I wished existed for
+      the people in my life I love most. She's not a product. She's not for sale.
+      She's yours, configured around your reality, running on a server I control,
+      isolated from anyone else's. This page walks through what she'll do for you.
+      Read at your own pace. When you're ready, just message me.
+    </p>
+    <p class="section-lede" style="font-style: italic; color: var(--gold-bright); font-family: 'Cormorant Garamond', serif; font-size: 24px; margin-top: 32px;">
+      You think strategy. She handles everything else.
+    </p>
+  </div>
+</section>
+
+<hr class="divider"/>
+
+<!-- ════════════════════════ FEATURE: HBS ADVISOR ════════════════════════ -->
+<section>
+  <div class="wrap">
+    <div class="feature">
+      <div class="copy">
+        <div class="feature-tag">6:47 AM · Already on your pillow</div>
+        <h3>The morning brief, <em>edited like a magazine.</em></h3>
+        <p>
+          A single voice note when you wake. Overnight from your team in
+          Asia. The three meetings that need you sharp today. Gabriel's
+          parent-teacher slot Friday. The one thing the market did while
+          you slept. Curated, not aggregated. Two minutes, sometimes less.
+        </p>
+        <p>
+          By the time you've finished your coffee, you know what the day
+          asks of you and what she's already handled. No app to open. No
+          inbox to dread.
+        </p>
+      </div>
+      <div class="example">
+        <div class="who">Voice memo · 6:47 AM · 1:48 long</div>
+        <p class="said">"Morning, Snowy. Three things from overnight."</p>
+        <p class="said">"One — Ivy closed the Madrid distributor renewal at the
+          number you wanted. The Shenzhen office needs your nod on the new
+          warehouse lease by Thursday; I drafted three answers ranging from
+          soft yes to firm no."</p>
+        <p class="said">"Two — Gabriel's pediatrician confirmed his next
+          checkup for Wednesday 10am; I moved your investor call to 11:45 so
+          you can take him yourself."</p>
+        <p class="said">"Three — the regulatory shift in PRC import rules you
+          flagged last month just dropped overnight. It affects three of your
+          SKUs. You'll want to read this before your 9am with the Shanghai
+          team. Brief is in your inbox."</p>
+        <div class="meta">Triaged 312 messages overnight · 11 need you · 6 already replied in your tone</div>
+      </div>
+    </div>
+
+    <!-- ════════════════════════ FEATURE: HBS ADVISOR ════════════════════════ -->
+    <div class="feature flip">
+      <div class="copy">
+        <div class="feature-tag">Real-time counsel</div>
+        <h3>An <em>HBS professor</em> in your pocket, mid-conversation.</h3>
+        <p>
+          Before you reply to that supplier, before you walk into that
+          board meeting, before you make that hire — Minerva is reading
+          the room with you. She breaks down the negotiation in real time
+          via WhatsApp, in the analytical, calm voice of a top business
+          school professor. No noise. No flattery. Just sharp counsel.
+        </p>
+        <p>
+          She has read every word your contact has ever sent you,
+          remembers your goals on this deal, and knows your walk-away
+          number. Her advice is yours, sharpened.
+        </p>
+      </div>
+      <div class="example">
+        <div class="who">Minerva → You · Tuesday 14:32</div>
+        <p class="said">"Snowy — read between the lines of Marcus's last
+          message. He just told you their Q4 budget closes Friday. That's
+          leverage. I'd counter at €380K with a 30-day expiry, framed around
+          mutual urgency."</p>
+        <p class="said">"You've negotiated three deals with Marcus before. He
+          always opens 12% above his floor and folds at 6%. He's at 8% right
+          now."</p>
+        <p class="said">"Want me to draft the reply in your tone?"</p>
+        <div class="meta">Channel: WhatsApp · Triggered by: incoming negotiation · Memory: 3 prior deals with Marcus</div>
+      </div>
+    </div>
+
+    <!-- ════════════════════════ FEATURE: MANAGE YOUR TEAM ════════════════════════ -->
+    <div class="feature">
+      <div class="copy">
+        <div class="feature-tag">Hifas · Operations</div>
+        <h3>Manage Ivy. Manage the Spanish team.<br/><em>You manage strategy.</em></h3>
+        <p>
+          Minerva runs the operating cadence so you don't have to. She reviews
+          Ivy's weekly plan in your tone, asks the questions you would ask,
+          flags the gaps you would flag. The Spanish team gets daily check-ins
+          that sound exactly like you. You see only what needs your decision.
+        </p>
+        <p>
+          Every conversation tracked. Every commitment logged. Every promise
+          followed up. You don't lose a thread. You don't repeat yourself.
+          You think strategy; she runs the company on your behalf.
+        </p>
+      </div>
+      <div class="example">
+        <div class="who">Hifas daily brief · 8:00 AM Madrid time</div>
+        <p class="said">"Ivy submitted the Q3 plan last night. Three concerns
+          worth your eye: (1) the Madrid sales hire is 6 weeks behind, (2)
+          inventory turn dropped 18% in March, (3) her headcount ask is €240K
+          above plan. Want me to push back in your tone?"</p>
+        <p class="said">"Spanish team: Carlos closed Bilbao at €180K, 22% above
+          target — good day for him. Lucia needs your approval on the Sevilla
+          lease by Thursday; I drafted three responses ranging from soft yes
+          to firm no."</p>
+        <p class="said">"Hifas China: Shenzhen Q1 numbers came in. Margins
+          held; volume up 14%. The full deck is in your inbox if you want it,
+          but nothing in there needs you today."</p>
+        <p class="said">"That's it. Take Gabriel to the park."</p>
+        <div class="meta">Reviewed: 47 messages · Drafted: 12 replies · Awaiting you: 2 decisions</div>
+      </div>
+    </div>
+
+    <!-- ════════════════════════ FEATURE: HIFAS CHINA — LEADS + SHIPMENTS ════════════════════════ -->
+    <div class="feature flip">
+      <div class="copy">
+        <div class="feature-tag">Hifas China · Pipeline + Supply Chain</div>
+        <h3>Every lead, every container, every customs clearance — <em>tracked.</em></h3>
+        <p>
+          The Hifas business runs on a thousand moving pieces. Minerva watches
+          all of them. Every lead from Madrid trade shows logged with the next
+          touchpoint scheduled. Every container from Valencia → Shanghai
+          tracked port-to-port; she pings you only if the ETA slips by more
+          than 48 hours or customs flags an HS code.
+        </p>
+        <p>
+          She knows your distributors in Beijing, Chengdu, and Shenzhen by
+          name. She knows which one always pays late, which one always asks
+          for samples, which one is your largest growth channel. She prepares
+          your monthly business review with the numbers that actually matter,
+          not the ones that look pretty.
+        </p>
+      </div>
+      <div class="example">
+        <div class="who">Hifas China · Friday brief</div>
+        <p class="said">"Pipeline: 12 active leads in China, weighted €1.4M.
+          Two deserve your attention — the Beijing chain wants a call this
+          week, and the Shenzhen distributor is going cold (last touch 18
+          days ago). I drafted both follow-ups in your tone, in
+          Mandarin and English."</p>
+        <p class="said">"Shipments: 3 containers in transit Valencia →
+          Shanghai. <em>MV Atlantic Star</em> is 36 hours behind schedule —
+          Suez delays. Receiver in Shanghai has been notified; new ETA April
+          30. No customs flags."</p>
+        <p class="said">"Inventory: Madrid warehouse hits reorder threshold
+          early next week. Forecast model says reorder by May 12; PO draft
+          ready for your review."</p>
+        <p class="said">"Compliance: Two PRC import licenses expire in 6
+          weeks. Renewal paperwork drafted, outside counsel in Beijing
+          notified. They confirmed the new HS-code interpretation matches
+          your March memo."</p>
+        <div class="meta">Sources: ERP · Shipping APIs · PRC customs feeds · CRM · 22 prior shipments</div>
+      </div>
+    </div>
+
+    <!-- ════════════════════════ FEATURE: FINANCIAL ADVISOR ════════════════════════ -->
+    <div class="feature">
+      <div class="copy">
+        <div class="feature-tag">Your private wealth desk</div>
+        <h3>The world's best financial advisor —<br/><em>with a Goldman PM's discipline.</em></h3>
+        <p>
+          When your private banker pitches you a structured note, when a PE
+          firm sends you a co-invest opportunity, when your wealth manager
+          recommends rebalancing — Minerva does not write you a bullet-point
+          summary. She writes you the kind of memo a senior portfolio manager
+          would write to a thoughtful family office. Three to five paragraphs
+          of real reasoning. Risk-adjusted return analysis. Counterparty
+          diligence. Where it fits in your thesis. Where it doesn't.
+        </p>
+        <p>
+          She knows your risk tolerance from the way you've actually behaved
+          in past decisions — not from a questionnaire. She knows your cash
+          needs (Hifas reinvestment, Gabriel's future, real-estate carries).
+          She knows your stated horizon, and she watches whether your behavior
+          matches it. When the banker is selling something that's good for the
+          banker, she says so. When it's actually good for you, she says that too.
+        </p>
+        <p>
+          Then she drafts the reply to the banker — long, precise, grounded
+          in the actual term sheet, the actual market — and explains the
+          entire logic to you on WhatsApp before she sends anything. You
+          decide. She executes.
+        </p>
+      </div>
+      <div class="example">
+        <div class="who">Minerva → You · WhatsApp · Saturday 09:14</div>
+        <p class="said">"Snowy — your banker at JPMS just pitched the
+          autocallable on the SX5E with 8.5% coupon, 40% downside barrier,
+          18-month tenor. I drafted the reply. Before you read it, here's why
+          I'm saying no:"</p>
+        <p class="said">"<strong>One.</strong> The implied vol they're
+          selling is 14.2%, but realized 1y vol on SX5E is 11.8%. They're
+          extracting roughly 240 bps of carry from the volatility surface.
+          That spread goes to JPMS — not to you."</p>
+        <p class="said">"<strong>Two.</strong> The 40% barrier looks
+          conservative until you stress-test it. SX5E was within 6% of that
+          level twice in the last decade — March 2020 and October 2022. Your
+          autocall feature kicks in only on the first six observation dates;
+          if it doesn't trigger early, you're locked into 18 months of
+          downside risk for an 8.5% premium that's effectively 6% after the
+          vol leakage."</p>
+        <p class="said">"<strong>Three.</strong> This product is a sell
+          for them this quarter — they have a desk inventory problem on
+          long-dated SX5E vol. You are the buyer they need."</p>
+        <p class="said">"<strong>What I'd do instead.</strong> If you want
+          European equity exposure with downside protection and 6–9% target
+          yield, the cleaner trade is a covered-call overlay on your existing
+          SXLE position. I can model it; the carry is similar with no
+          counterparty risk and full liquidity. You also stay aligned with
+          your stated 5-year horizon."</p>
+        <p class="said">"My draft to him is below. Tap to send, tap to edit,
+          or call me and we'll redo it together."</p>
+        <div class="meta">Sources: term sheet · 10-year SX5E history · JPMS desk axes · your last 24 portfolio decisions</div>
+      </div>
+    </div>
+
+    <!-- ════════════════════════ FEATURE: REPLIES IN YOUR TONE ════════════════════════ -->
+    <div class="feature flip">
+      <div class="copy">
+        <div class="feature-tag">Your voice, multiplied</div>
+        <h3>Auto-replies that sound <em>exactly like you.</em></h3>
+        <p>
+          Minerva learns your tone from the way you've actually written.
+          Warm with old friends. Crisp with bankers. Firm with vendors.
+          Different strategies for different relationships — you set the
+          policy once, she applies it forever.
+        </p>
+        <p>
+          The friend you've been meaning to call gets a thoughtful warm
+          message at the right moment. The contractor chasing payment gets
+          a firm boundary. The colleague you've been avoiding gets a
+          graceful redirect. You stop carrying message-guilt.
+        </p>
+      </div>
+      <div class="example">
+        <div class="who">Drafted by Minerva · Awaiting your tap</div>
+        <p class="said">→ <strong>To a close friend:</strong> "Sorry for the
+          radio silence — Hifas China launch has been chaos. Drinks Saturday?
+          I miss your face."</p>
+        <p class="said">→ <strong>To a vendor (firm):</strong> "Thanks for the
+          follow-up. Send me the updated SOW and I'll release the deposit
+          Friday."</p>
+        <p class="said">→ <strong>To a cold investor:</strong> "Appreciate the
+          outreach. Hifas isn't raising right now. Happy to reconnect in
+          Q4."</p>
+        <p class="said">→ <strong>To a Beijing distributor (Mandarin):</strong>
+          "感谢您的耐心。我们的西班牙团队下周会与您跟进。"</p>
+        <div class="meta">Six relationship modes · Two languages · All in your voice, learned from 18 months of how you actually write.</div>
+      </div>
+    </div>
+
+    <!-- ════════════════════════ FEATURE: GABRIEL ════════════════════════ -->
+    <div class="feature">
+      <div class="copy">
+        <div class="feature-tag">Gabriel</div>
+        <h3>His pediatrician, his school,<br/>his books — <em>all tracked.</em></h3>
+        <p>
+          Minerva knows when Gabriel's next vaccine is due. She knows which
+          books he's outgrowing and which his developmental milestones suggest
+          he'd love next. She knows the school's calendar, the parent group
+          chats, who his best friend is, what his pediatrician said last visit.
+        </p>
+        <p>
+          She orders the books. She schedules the appointments. She drafts
+          the parent group replies in your tone. She reminds you of his best
+          friend's birthday with three age-appropriate gift options pre-vetted
+          for free shipping.
+        </p>
+      </div>
+      <div class="example">
+        <div class="who">Gabriel · This week</div>
+        <p class="said">"MMR booster scheduled with Dr. Chen — Wednesday 10am.
+          Insurance verified. School notified. I'll move your 11am to
+          11:45."</p>
+        <p class="said">"Found 4 books for his developmental stage; two are
+          Mandarin-English (matches your bilingual goal). I ordered the top
+          three. Arriving Friday."</p>
+        <p class="said">"His best friend Lucas turns 3 on April 14. Three gift
+          options, all under €60, all with same-day delivery. Want me to
+          pick?"</p>
+        <div class="meta">Health · School · Friends · Books · Activities — all tracked.</div>
+      </div>
+    </div>
+
+    <!-- ════════════════════════ FEATURE: CHINA LAW ════════════════════════ -->
+    <div class="feature flip">
+      <div class="copy">
+        <div class="feature-tag">Cross-border counsel</div>
+        <h3>China legal &amp; tax, <em>at her fingertips.</em></h3>
+        <p>
+          Minerva has read the PRC Company Law, the Tax Code, the SAFE
+          regulations, every double-tax treaty in force. She has API access
+          to Beijing's legal databases. When you're structuring a
+          Shenzhen-HK deal at 10pm, she gives you advice grounded in actual
+          statute, not a hallucination.
+        </p>
+        <p>
+          She's not a lawyer. But she briefs you the way a Cravath partner
+          would — with the citation, the context, and the recommendation.
+          Then she tells you which question to escalate to a real attorney
+          and which to just decide.
+        </p>
+      </div>
+      <div class="example">
+        <div class="who">Minerva · Tax opinion drafted</div>
+        <p class="said">"Your Shenzhen supplier invoiced via the HK entity.
+          Under Article 26 of the China-HK DTA, withholding tax on royalties
+          drops from 10% to 7% — but only if the HK entity satisfies the
+          beneficial-ownership test. I drafted the substance memo."</p>
+        <p class="said">"Recommend escalating one question to outside counsel:
+          whether the Singapore route would qualify as treaty-shopping under
+          the new PPT rules. Three lawyer options, all flat-fee, attached."</p>
+        <div class="meta">Source: PRC Tax Code (2024 ed.) · DTA · 7 prior client memos</div>
+      </div>
+    </div>
+
+    <!-- ════════════════════════ FEATURE: WECHAT ════════════════════════ -->
+    <div class="feature">
+      <div class="copy">
+        <div class="feature-tag">WeChat · WhatsApp · Email · iMessage</div>
+        <h3>One brain across <em>every channel.</em></h3>
+        <p>
+          The 47 unread messages in your investor WeChat group? Minerva read
+          them, surfaced the three decisions waiting for you, and ignored
+          the rest. The email thread that's gone 14 messages deep? She knows
+          where it stands and what you need to say.
+        </p>
+        <p>
+          When you ask "what's the latest with Marcus?" she answers across
+          WeChat, WhatsApp, email, and SMS — in one paragraph. When you
+          decide to reply, she sends it on the right channel, in your tone,
+          in the right language.
+        </p>
+      </div>
+      <div class="example">
+        <div class="who">Status — across all your channels</div>
+        <p class="said">"Your Shenzhen distributor is at 8% over floor on
+          the volume rebate negotiation. He'll close by Friday. I recommend
+          counter at the number we discussed last week. Reply on WeChat."</p>
+        <p class="said">"Your Hifas investor WeChat group: 47 messages
+          overnight. 3 decisions waiting for you (the term sheet, two
+          follow-ups). The other 44 are noise — I'll handle the noise."</p>
+        <p class="said">"Email backlog: 213. Triaged. 4 need you. The rest are
+          drafted, waiting on your tap."</p>
+        <p class="said">"WhatsApp: Ivy sent the warehouse photos at 11pm
+          Madrid time. I'll wait until 8am there to reply on your behalf
+          unless you're awake."</p>
+        <div class="meta">Channels: WeChat · WhatsApp · Gmail · iMessage · Outlook · Shenzhen / Madrid timezone-aware</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Full-bleed visual break — woman at center, data streams orbiting her -->
+<div class="visual-break">
+  <img src="section_command.png" alt="Minerva orbits around you" />
+  <div class="visual-break-caption">
+    <p>You at the center.<br/>Hifas, Gabriel, everything else — attended to.</p>
+  </div>
+</div>
+
+<!-- ════════════════════════ MORE USE CASES — GRID ════════════════════════ -->
+<section>
+  <div class="narrow" style="margin-bottom: 56px;">
+    <div class="section-eyebrow">Beyond the obvious</div>
+    <h2 class="section-title">A dozen other things <em>she handles.</em></h2>
+    <p class="section-lede">
+      The features above are the obvious ones. Here are the ones that quietly
+      change your life over the first 90 days.
+    </p>
+  </div>
+
+  <div class="wrap">
+    <div class="uc-grid">
+
+      <div class="uc">
+        <div class="uc-icon">Travel</div>
+        <h4>Books your Madrid–Shenzhen trips <em>without you asking.</em></h4>
+        <p>Knows you fly Cathay First when you can. Knows the Madrid hotel you actually like. Books, holds, rebooks on disruption. Knows when not to schedule a long-haul on Gabriel's birthday week.</p>
+      </div>
+
+      <div class="uc">
+        <div class="uc-icon">Meeting prep</div>
+        <h4>Briefs you before <em>every meeting.</em></h4>
+        <p>Reads the LinkedIn, the last 6 months of correspondence, the news on their company. Hands you a one-page brief 30 minutes before the meeting. With three angles to push and two to avoid.</p>
+      </div>
+
+      <div class="uc">
+        <div class="uc-icon">Market radar</div>
+        <h4>Watches what <em>moves your portfolio.</em></h4>
+        <p>Asia open by 6:50 AM your time. Filings on the names you own. Macro signals. She summarizes only what changes your stance — never the noise. The deeper banker correspondence is its own feature above.</p>
+      </div>
+
+      <div class="uc">
+        <div class="uc-icon">Crisis triage</div>
+        <h4>The <em>3am text</em> that needs you.</h4>
+        <p>If a journalist is about to write a hit piece. If a key client is angry. If your CFO emailed at midnight saying "we need to talk." Minerva wakes you up only for the things that matter — and tells you what to say.</p>
+      </div>
+
+      <div class="uc">
+        <div class="uc-icon">Documents</div>
+        <h4>Drafts the <em>NDA. The MOU. The board memo.</em></h4>
+        <p>From a sentence prompt. With Hifas's standard clauses, your formatting, your signature line. Reviews counterparty redlines in English, Spanish, or Mandarin. Tells you what changed and whether it matters.</p>
+      </div>
+
+      <div class="uc">
+        <div class="uc-icon">Family rhythm</div>
+        <h4>Coordinates Gabriel's <em>life around yours.</em></h4>
+        <p>Nanny schedule. School calendar. Grandparents' visits. Birthday lists. The play-date with Lucas Saturday. Anniversary reminders three weeks early with three pre-vetted gift ideas.</p>
+      </div>
+
+      <div class="uc">
+        <div class="uc-icon">Predictive needs</div>
+        <h4>Knows what you'll <em>want before you ask.</em></h4>
+        <p>You've sent your mother flowers every year on the same date for five years. Minerva orders them again — the variety she actually liked, the right florist in her city, two weeks early so they arrive on time. With a card draft in your voice for your approval.</p>
+      </div>
+
+      <div class="uc">
+        <div class="uc-icon">Health</div>
+        <h4>Tracks <em>you,</em> not just data.</h4>
+        <p>Whoop, Oura, your nutritionist's notes. She nudges — "you're sleeping 5.2h average this week, push the 7am off till 8" — and books your dermatologist 10 days before you'd think to.</p>
+      </div>
+
+      <div class="uc">
+        <div class="uc-icon">Restaurants</div>
+        <h4>Books the <em>right table.</em></h4>
+        <p>You're hosting your investor partner Thursday. Minerva picks the room she'd love based on her Instagram, books the table she'd want, sends the wine list pre-curated. You walk in, the sommelier knows your guest's name.</p>
+      </div>
+
+      <div class="uc">
+        <div class="uc-icon">Charity</div>
+        <h4>Manages your <em>giving strategy.</em></h4>
+        <p>The three causes you care about. Tax-efficient structures. End-of-year planning. The right amount to the right org at the right moment. Quietly, without becoming a project.</p>
+      </div>
+
+      <div class="uc">
+        <div class="uc-icon">Voice + phone</div>
+        <h4>Takes calls <em>in your voice.</em></h4>
+        <p>Cold prospect on the phone? Routine vendor? She picks up in your tone, handles the conversation, transcribes it, summarizes the outcome. You only join the calls that need you.</p>
+      </div>
+
+      <div class="uc">
+        <div class="uc-icon">Style</div>
+        <h4>Your <em>private stylist.</em></h4>
+        <p>Knows your wardrobe, your size, your Net-a-Porter preferences. Pulls a pre-vetted outfit suggestion before each event. Buys what you nod at. Returns what you don't.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<hr class="divider"/>
+
+<!-- ════════════════════════ ARCHITECTURE ════════════════════════ -->
+<section>
+  <div class="narrow" style="margin-bottom: 48px;">
+    <div class="section-eyebrow">Inside the system</div>
+    <h2 class="section-title">How she <em>actually thinks.</em></h2>
+    <p class="section-lede">
+      Most "AI assistants" are a thin chat layer on top of one model. Minerva
+      is a real architecture. Five cognitive layers, each doing one thing
+      brilliantly. Designed by someone who has spent the last six months
+      building it specifically for your reality.
+    </p>
+  </div>
+
+  <div class="wrap">
+    <div class="arch">
+      <!-- Architecture SVG diagram -->
+      <div class="arch-svg-wrap">
+        <svg class="arch-svg" viewBox="0 0 980 540" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#d4a574"/>
+              <stop offset="100%" stop-color="#e8c896"/>
+            </linearGradient>
+            <linearGradient id="dimGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#281f28"/>
+              <stop offset="100%" stop-color="#1a141a"/>
+            </linearGradient>
+            <marker id="arrowhead" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+              <polygon points="0 0, 6 3, 0 6" fill="#d4a574"/>
+            </marker>
+          </defs>
+
+          <!-- background -->
+          <rect width="980" height="540" fill="url(#dimGrad)" rx="6"/>
+
+          <!-- LEFT: Channels coming in -->
+          <text x="60" y="30" fill="#877c70" font-size="11" font-family="ui-monospace,monospace" letter-spacing="2">YOUR CHANNELS</text>
+
+          <g transform="translate(40, 50)">
+            <rect x="0" y="0" width="160" height="32" rx="4" fill="#281f28" stroke="#3a2e3a"/>
+            <text x="80" y="20" text-anchor="middle" fill="#f0e8dc" font-size="13" font-family="-apple-system, sans-serif">WhatsApp</text>
+          </g>
+          <g transform="translate(40, 92)">
+            <rect x="0" y="0" width="160" height="32" rx="4" fill="#281f28" stroke="#3a2e3a"/>
+            <text x="80" y="20" text-anchor="middle" fill="#f0e8dc" font-size="13" font-family="-apple-system, sans-serif">WeChat</text>
+          </g>
+          <g transform="translate(40, 134)">
+            <rect x="0" y="0" width="160" height="32" rx="4" fill="#281f28" stroke="#3a2e3a"/>
+            <text x="80" y="20" text-anchor="middle" fill="#f0e8dc" font-size="13" font-family="-apple-system, sans-serif">Email</text>
+          </g>
+          <g transform="translate(40, 176)">
+            <rect x="0" y="0" width="160" height="32" rx="4" fill="#281f28" stroke="#3a2e3a"/>
+            <text x="80" y="20" text-anchor="middle" fill="#f0e8dc" font-size="13" font-family="-apple-system, sans-serif">iMessage / SMS</text>
+          </g>
+          <g transform="translate(40, 218)">
+            <rect x="0" y="0" width="160" height="32" rx="4" fill="#281f28" stroke="#3a2e3a"/>
+            <text x="80" y="20" text-anchor="middle" fill="#f0e8dc" font-size="13" font-family="-apple-system, sans-serif">Voice / Phone</text>
+          </g>
+
+          <!-- arrows from channels to ingest -->
+          <path d="M 200 66 L 280 66" stroke="#d4a574" stroke-width="1" fill="none" marker-end="url(#arrowhead)"/>
+          <path d="M 200 108 L 280 108" stroke="#d4a574" stroke-width="1" fill="none" marker-end="url(#arrowhead)"/>
+          <path d="M 200 150 L 280 150" stroke="#d4a574" stroke-width="1" fill="none" marker-end="url(#arrowhead)"/>
+          <path d="M 200 192 L 280 192" stroke="#d4a574" stroke-width="1" fill="none" marker-end="url(#arrowhead)"/>
+          <path d="M 200 234 L 280 234" stroke="#d4a574" stroke-width="1" fill="none" marker-end="url(#arrowhead)"/>
+
+          <!-- CENTER: Minerva server -->
+          <text x="490" y="30" fill="#877c70" font-size="11" font-family="ui-monospace,monospace" letter-spacing="2" text-anchor="middle">MINERVA · YOUR PRIVATE SERVER</text>
+
+          <rect x="280" y="55" width="420" height="430" rx="8" fill="none" stroke="#3a2e3a" stroke-width="1" stroke-dasharray="2,4"/>
+
+          <!-- Channel gateway -->
+          <rect x="296" y="78" width="180" height="60" rx="4" fill="#221a22" stroke="#d4a574" stroke-width="1.5"/>
+          <text x="386" y="100" text-anchor="middle" fill="#d4a574" font-size="10" font-family="ui-monospace,monospace" letter-spacing="1.5">CHANNEL GATEWAY</text>
+          <text x="386" y="120" text-anchor="middle" fill="#c9bdb0" font-size="11" font-family="-apple-system,sans-serif">Normalize · Dedupe · Queue</text>
+
+          <!-- Memory -->
+          <rect x="510" y="78" width="180" height="60" rx="4" fill="#221a22" stroke="#d4a574" stroke-width="1.5"/>
+          <text x="600" y="100" text-anchor="middle" fill="#d4a574" font-size="10" font-family="ui-monospace,monospace" letter-spacing="1.5">MEMORY · 4 STORES</text>
+          <text x="600" y="120" text-anchor="middle" fill="#c9bdb0" font-size="11" font-family="-apple-system,sans-serif">Episodic · Semantic · Skills · You</text>
+
+          <!-- Orchestrator -->
+          <rect x="296" y="160" width="394" height="80" rx="4" fill="#281f28" stroke="#e8c896" stroke-width="2"/>
+          <text x="493" y="184" text-anchor="middle" fill="#e8c896" font-size="11" font-family="ui-monospace,monospace" letter-spacing="2">ORCHESTRATOR · THE BRAIN</text>
+          <text x="493" y="208" text-anchor="middle" fill="#f0e8dc" font-size="13" font-family="'Cormorant Garamond',serif" font-style="italic">Triage → Drafter → Researcher → Negotiator → Coach</text>
+          <text x="493" y="226" text-anchor="middle" fill="#877c70" font-size="11" font-family="-apple-system,sans-serif">Decides: ignore / reply / research / escalate</text>
+
+          <!-- Multi-LLM router -->
+          <rect x="296" y="262" width="394" height="60" rx="4" fill="#221a22" stroke="#c98590" stroke-width="1.5"/>
+          <text x="493" y="284" text-anchor="middle" fill="#c98590" font-size="10" font-family="ui-monospace,monospace" letter-spacing="1.5">MULTI-LLM ROUTER</text>
+          <text x="493" y="304" text-anchor="middle" fill="#c9bdb0" font-size="11" font-family="-apple-system,sans-serif">Anthropic · OpenAI · Google · DeepSeek · Local Qwen · Routed by task</text>
+
+          <!-- Governance / safety -->
+          <rect x="296" y="344" width="180" height="50" rx="4" fill="#221a22" stroke="#3a2e3a"/>
+          <text x="386" y="364" text-anchor="middle" fill="#d4a574" font-size="10" font-family="ui-monospace,monospace" letter-spacing="1.5">GOVERNANCE</text>
+          <text x="386" y="382" text-anchor="middle" fill="#877c70" font-size="11" font-family="-apple-system,sans-serif">€-thresholds · Hold gates</text>
+
+          <!-- Audit -->
+          <rect x="510" y="344" width="180" height="50" rx="4" fill="#221a22" stroke="#3a2e3a"/>
+          <text x="600" y="364" text-anchor="middle" fill="#d4a574" font-size="10" font-family="ui-monospace,monospace" letter-spacing="1.5">FULL AUDIT</text>
+          <text x="600" y="382" text-anchor="middle" fill="#877c70" font-size="11" font-family="-apple-system,sans-serif">Every action · Every word</text>
+
+          <!-- DB -->
+          <rect x="296" y="412" width="394" height="50" rx="4" fill="#281f28" stroke="#3a2e3a"/>
+          <text x="493" y="434" text-anchor="middle" fill="#877c70" font-size="10" font-family="ui-monospace,monospace" letter-spacing="1.5">PRIVATE DB · POSTGRES + ROW-LEVEL SECURITY</text>
+          <text x="493" y="450" text-anchor="middle" fill="#c9bdb0" font-size="11" font-family="-apple-system,sans-serif">Your data, encrypted, isolated, never shared with another user</text>
+
+          <!-- arrows out -->
+          <path d="M 700 108 L 780 108" stroke="#d4a574" stroke-width="1" fill="none" marker-end="url(#arrowhead)"/>
+
+          <!-- RIGHT: Tools / MCPs -->
+          <text x="900" y="30" fill="#877c70" font-size="11" font-family="ui-monospace,monospace" letter-spacing="2" text-anchor="end">SHE CAN ACT ON</text>
+
+          <g transform="translate(780, 50)">
+            <rect x="0" y="0" width="160" height="28" rx="4" fill="#281f28" stroke="#3a2e3a"/>
+            <text x="80" y="18" text-anchor="middle" fill="#f0e8dc" font-size="12" font-family="-apple-system, sans-serif">Calendar · Travel</text>
+          </g>
+          <g transform="translate(780, 86)">
+            <rect x="0" y="0" width="160" height="28" rx="4" fill="#281f28" stroke="#3a2e3a"/>
+            <text x="80" y="18" text-anchor="middle" fill="#f0e8dc" font-size="12" font-family="-apple-system, sans-serif">China Legal API</text>
+          </g>
+          <g transform="translate(780, 122)">
+            <rect x="0" y="0" width="160" height="28" rx="4" fill="#281f28" stroke="#3a2e3a"/>
+            <text x="80" y="18" text-anchor="middle" fill="#f0e8dc" font-size="12" font-family="-apple-system, sans-serif">Shopify · Retail</text>
+          </g>
+          <g transform="translate(780, 158)">
+            <rect x="0" y="0" width="160" height="28" rx="4" fill="#281f28" stroke="#3a2e3a"/>
+            <text x="80" y="18" text-anchor="middle" fill="#f0e8dc" font-size="12" font-family="-apple-system, sans-serif">Whoop · Health</text>
+          </g>
+          <g transform="translate(780, 194)">
+            <rect x="0" y="0" width="160" height="28" rx="4" fill="#281f28" stroke="#3a2e3a"/>
+            <text x="80" y="18" text-anchor="middle" fill="#f0e8dc" font-size="12" font-family="-apple-system, sans-serif">Bank · Cards</text>
+          </g>
+          <g transform="translate(780, 230)">
+            <rect x="0" y="0" width="160" height="28" rx="4" fill="#281f28" stroke="#3a2e3a"/>
+            <text x="80" y="18" text-anchor="middle" fill="#f0e8dc" font-size="12" font-family="-apple-system, sans-serif">Pediatrician · School</text>
+          </g>
+          <g transform="translate(780, 266)">
+            <rect x="0" y="0" width="160" height="28" rx="4" fill="#281f28" stroke="#3a2e3a"/>
+            <text x="80" y="18" text-anchor="middle" fill="#f0e8dc" font-size="12" font-family="-apple-system, sans-serif">Bloomberg · News</text>
+          </g>
+          <g transform="translate(780, 302)">
+            <rect x="0" y="0" width="160" height="28" rx="4" fill="#281f28" stroke="#3a2e3a"/>
+            <text x="80" y="18" text-anchor="middle" fill="#f0e8dc" font-size="12" font-family="-apple-system, sans-serif">Net-a-Porter · Stylist</text>
+          </g>
+
+        </svg>
+      </div>
+
+      <div class="arch-legend">
+        <div class="arch-legend-item">
+          <h5>Why this matters</h5>
+          <p>One brain across all channels means she sees patterns no human could — what your bank told you Tuesday matters to the deal you're closing Friday.</p>
+        </div>
+        <div class="arch-legend-item">
+          <h5>Why so many models</h5>
+          <p>Every task uses the model best suited for it. Cheap classification on Haiku. Strategic drafting on Opus. Reasoning on DeepSeek. Long-context on Gemini. Routed automatically.</p>
+        </div>
+        <div class="arch-legend-item">
+          <h5>Why governance</h5>
+          <p>She acts only within limits you set. Spend over €X gets held for your approval. Sensitive emails never auto-send. Every action is logged and reversible.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider"/>
+
+<!-- ════════════════════════ DECISION FLOW ════════════════════════ -->
+<section>
+  <div class="narrow">
+    <div class="section-eyebrow">Her decision-making</div>
+    <h2 class="section-title">What happens when a <em>message arrives.</em></h2>
+    <p class="section-lede">
+      Every inbound — email, WhatsApp, WeChat — runs through the same four-step
+      decision loop. Most messages take <em>milliseconds</em>; she doesn't bother you.
+      The hard ones get her full attention.
+    </p>
+
+    <div class="flow">
+      <div class="flow-step">
+        <div class="flow-num">01</div>
+        <h5>Triage</h5>
+        <p>Read it. Decide: ignore, reply, research, or escalate to you. Most go to "ignore" — that's the right answer.</p>
+      </div>
+      <div class="flow-step">
+        <div class="flow-num">02</div>
+        <h5>Pull context</h5>
+        <p>Memory of your prior threads with this person, your goals on this topic, your tone, your contracts.</p>
+      </div>
+      <div class="flow-step">
+        <div class="flow-num">03</div>
+        <h5>Act or draft</h5>
+        <p>If it's something you'd autopilot, she does it. If it needs your judgment, she drafts and waits for your tap.</p>
+      </div>
+      <div class="flow-step">
+        <div class="flow-num">04</div>
+        <h5>Trace</h5>
+        <p>Every step recorded. Every word audit-logged. Reversible. You can always see exactly why she did what she did.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider"/>
+
+<!-- ════════════════════════ TAILORED TO YOU ════════════════════════ -->
+<section>
+  <div class="wrap">
+    <div style="max-width: 800px; margin: 0 auto 48px; padding: 0 28px;">
+      <div class="section-eyebrow">She learns you</div>
+      <h2 class="section-title">By month three, she knows you<br/><em>better than your assistant ever did.</em></h2>
+    </div>
+    <div class="month-three">
+      <div class="copy">
+        <p>
+          The first week, she's a brilliant generalist. By month three, she has a model
+          of you so detailed that she predicts what you'll want before you ask. She
+          knows you fly Cathay First and prefer the Connaught, north-facing, with
+          herbal tea on arrival. She knows the four people you'd never cancel on. She
+          knows you take black coffee in the morning, herbal tea after 4pm, and never
+          wine before a big meeting.
+        </p>
+        <p>
+          She knows your Spanish team's individual quirks. She knows Ivy hits her
+          stride on Tuesdays and gets stuck on Fridays. She knows Gabriel sleeps
+          better when his bedtime story is in Mandarin. She knows you cry on the
+          anniversary of your father's passing, and she clears your calendar that
+          week without asking.
+        </p>
+        <p style="color: var(--gold-bright); font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 22px; line-height: 1.4; margin-top: 32px;">
+          She's not a tool. She's the most thoughtful person in your life — except
+          she's awake at 3am, never has a bad day, and remembers everything.
+        </p>
+      </div>
+      <div class="image-card">
+        <img src="section_advisor.png" alt="Minerva on iPhone" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider"/>
+
+<!-- ════════════════════════ PRIVACY ════════════════════════ -->
+<section>
+  <div class="narrow">
+    <div class="section-eyebrow">Yours alone</div>
+    <h2 class="section-title">Your data <em>never leaves your control.</em></h2>
+
+    <div class="privacy">
+      <h3>How privacy actually works</h3>
+      <ul>
+        <li>Your database is row-level-isolated. The system itself refuses to leak your rows to any other user — verified at the database level, not just in code.</li>
+        <li>Your messages, your memory, your contacts — all encrypted, all yours. Your team gets sub-orgs that route through your account; no other tenant ever sees your data.</li>
+        <li>Every action she takes is logged and reversible. Want to know why she sent a particular message? One click → full reasoning trail.</li>
+        <li>You set the autonomy level. From "tell me before everything" (week one) to "act on anything under €500" (month three). Adjust any time.</li>
+        <li>She runs on infrastructure you control. Today: a private server. Tomorrow: your private cloud. Never on someone else's "shared platform."</li>
+        <li>You can export your entire memory at any time. You can delete it at any time. You own everything.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════ CTA ════════════════════════ -->
+<section class="cta">
+  <div class="narrow">
+    <h2>When you're ready,<br/><em>just message me.</em></h2>
+    <p>
+      No app store. No subscription page. No onboarding form. Minerva is
+      already configured around your life — Hifas in Spain, Hifas in China,
+      Gabriel, Ivy, your contacts, your tone. Setup is a 30-minute call with
+      me. Then she's yours.
+    </p>
+    <p style="color: var(--gold-bright); font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 24px; margin-top: 32px;">
+      The only person you trust this much<br/>has to also be the one who built her.
+    </p>
+    <p class="signed">
+      Built by Jorge, for Snowy · April 2026 · Yours alone
+    </p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    Minerva v0.1 · Private · Built on 240+ verified tests, six reviewed architectural blocks, and one promise: she works for you alone.
+  </div>
+</footer>
+
+</body>
+</html>
